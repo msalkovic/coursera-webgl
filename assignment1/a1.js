@@ -7,8 +7,9 @@ window.app = {
     vertices: [],
     numVertices: 3,
     polygonRadius: 1,
-    numSubdivisions: 1,
+    numSubdivisions: 3,
     points: [],
+    twistAngle: 0,
   },
 
   init: function init() {
@@ -42,9 +43,8 @@ window.app = {
 
     this.createPolygon();
     this.tessellatePolygon();
+    this.twistPolygon(Math.PI / 3);
     this.render();
-
-    console.log('>>>', this.geometry.points.length);
   },  
 
   createPolygon: function createPolygon() {
@@ -98,6 +98,21 @@ window.app = {
     this.divideTriangle(c, ac, bc, n);
     this.divideTriangle(b, bc, ab, n);
     this.divideTriangle(ac, ab, bc, n);
+  },
+
+  twistPolygon: function twistPolygon(angle) {
+    var points = this.geometry.points;
+    var K = 1.0;
+    var i, d, x, y, T;
+
+    for (i = 0; i < points.length; i++) {
+        x = points[i][0];
+        y = points[i][1];
+        d = Math.sqrt(x * x + y * y);
+        T = K * d * angle;
+        points[i] = vec2(x * Math.cos(T) - y * Math.sin(T),
+                         x * Math.sin(T) + y * Math.cos(T));
+    }
   },
 
   render: function render() {
