@@ -4,10 +4,11 @@ window.app = {
   gl: null,
   canvas: null,
   geometry: {
-    points: [],
-    maxPoints: 3,
+    vertices: [],
+    numVertices: 3,
     polygonRadius: 1,
-    numSubdivisions: 5,
+    numSubdivisions: 1,
+    points: [],
   },
 
   init: function init() {
@@ -34,32 +35,69 @@ window.app = {
     var bufferId = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
 
-    // Associate out shader variables with our data buffer
+    // Associate our shader variables with our data buffer
     var vPosition = gl.getAttribLocation(program, "vPosition");
     gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
     this.createPolygon();
+    this.tessellatePolygon();
     this.render();
+
+    console.log('>>>', this.geometry.points.length);
   },  
 
   createPolygon: function createPolygon() {
-    var points = this.geometry.points;
+    var vertices = this.geometry.vertices;
     var radius = this.geometry.polygonRadius;
-    var maxPoints = this.geometry.maxPoints;
-    var angleStep = 2 * Math.PI / maxPoints;
+    var numVertices = this.geometry.numVertices;
+    var angleStep = 2 * Math.PI / numVertices;
     var i, angle;
 
-    // Clear current points.
-    points.splice(0, points.length);
+    // Clear current vertices.
+    vertices.splice(0, vertices.length);
 
-    for (i = 0; i <= maxPoints; i++) {
-      points.push(vec2(0, 0));
+    for (i = 0; i <= numVertices; ++i) {
+      vertices.push(vec2(0, 0));
       angle = i * angleStep;
-      points.push(vec2(radius * Math.cos(angle), radius * Math.sin(angle)));
+      vertices.push(vec2(radius * Math.cos(angle), radius * Math.sin(angle)));
       angle = (i + 1) * angleStep;
-      points.push(vec2(radius * Math.cos(angle), radius * Math.sin(angle)));
+      vertices.push(vec2(radius * Math.cos(angle), radius * Math.sin(angle)));
     }
+  },
+
+  tessellatePolygon: function tessellatePolygon() {
+    var vertices = this.geometry.vertices;
+    var numVertices = this.geometry.numVertices;
+    var i;
+
+    for (i = 0; i < numVertices; ++i) {
+      this.divideTriangle(vertices[3 * i],
+                          vertices[3 * i + 1],
+                          vertices[3 * i + 2],
+                          this.geometry.numSubdivisions);
+    }
+  },
+
+  addTriangle: function addTriangle(a, b, c) {
+    this.geometry.points.push(a, b, c);
+  },
+
+  divideTriangle: function divideTriangle(a, b, c, n) {
+    if (n === 0) {
+      this.addTriangle(a, b, c);
+      return;
+    }
+
+    var ab = mix(a, b, 0.5);
+    var ac = mix(a, c, 0.5);
+    var bc = mix(b, c, 0.5);
+    --n;
+
+    this.divideTriangle(a, ab, ac, n);
+    this.divideTriangle(c, ac, bc, n);
+    this.divideTriangle(b, bc, ab, n);
+    this.divideTriangle(ac, ab, bc, n);
   },
 
   render: function render() {
