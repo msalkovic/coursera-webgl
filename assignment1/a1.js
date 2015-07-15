@@ -41,10 +41,7 @@ window.app = {
     gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0);
     gl.enableVertexAttribArray(vPosition);
 
-    this.createPolygon();
-    this.tessellatePolygon();
-    this.twistPolygon(Math.PI / 3);
-    this.render();
+    this.redraw();
   },  
 
   createPolygon: function createPolygon() {
@@ -67,9 +64,13 @@ window.app = {
   },
 
   tessellatePolygon: function tessellatePolygon() {
+    var points = this.geometry.points;
     var vertices = this.geometry.vertices;
     var numVertices = this.geometry.numVertices;
     var i;
+
+    // Clear current points.
+    points.splice(0, points.length);
 
     for (i = 0; i < numVertices; ++i) {
       this.divideTriangle(vertices[3 * i],
@@ -115,6 +116,26 @@ window.app = {
     }
   },
 
+  readGeometryData: function readGeometryData() {
+    this.geometry.numVertices = document.getElementById('num-vertices').value;
+    this.geometry.numSubdivisions = document.getElementById('num-subdivisions').value;
+
+    var deg = document.getElementById('twist-angle').value;
+    this.geometry.twistAngle = Math.PI * deg / 180.0;
+  },
+
+  createGeometry: function createGeometry() {
+    this.createPolygon();
+    this.tessellatePolygon();
+    this.twistPolygon(this.geometry.twistAngle);
+  },
+
+  redraw: function redraw() {
+    this.readGeometryData();
+    this.createGeometry();
+    this.render();
+  },
+
   render: function render() {
     var gl = this.gl;
     var points = this.geometry.points;
@@ -129,4 +150,3 @@ window.onload = function init()
 {
   window.app.init();
 };
-

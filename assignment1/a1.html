@@ -1,38 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
-<title>1. Tessellation and Twist</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
 
-<script id="vertex-shader" type="x-shader/x-vertex">
-attribute vec4 vPosition;
+  <!-- Mobile Specific Metas –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- FONT –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+  <!-- CSS –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="stylesheet" href="../css/skeleton.css">
 
-void
-main()
-{
+  <title>1. Tessellation and Twist</title>
+
+  <script id="vertex-shader" type="x-shader/x-vertex">
+  attribute vec4 vPosition;
+
+  void
+  main()
+  {
     gl_Position = vPosition;
-}
-</script>
+  }
+  </script>
 
-<script id="fragment-shader" type="x-shader/x-fragment">
-precision mediump float;
+  <script id="fragment-shader" type="x-shader/x-fragment">
+  precision mediump float;
 
-void
-main()
-{
+  void
+  main()
+  {
     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-}
-</script>
+  }
+  </script>
 
-<script type="text/javascript" src="../common/webgl-utils.js"></script>
-<script type="text/javascript" src="../common/initShaders.js"></script>
-<script type="text/javascript" src="../common/MV.js"></script>
-<script type="text/javascript" src="a1.js"></script>
+  <script type="text/javascript" src="../common/webgl-utils.js"></script>
+  <script type="text/javascript" src="../common/initShaders.js"></script>
+  <script type="text/javascript" src="../common/MV.js"></script>
+  <script type="text/javascript" src="a1.js"></script>
 </head>
 
 <body>
-<canvas id="gl-canvas" width="512" height="512">
-Oops ... your browser doesn't support the HTML5 canvas element
-</canvas>
+  <div class="container">
+    <h5 style="margin-top: 1em">1. Tessellation and Twist</h5>
+    <canvas id="gl-canvas" width="512" height="512" style="border: 1px solid black">
+      Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+
+    <h5>Options</h5>
+    <label for="num-vertices">Polygon vertices</label>
+    <input name="num-vertices" id="num-vertices" type="range" min="3" max="8" step="1" value="3">
+
+    <label for="num-subdivisions">Subdivision steps</label>
+    <input name="num-subdivisions" id="num-subdivisions" type="range" min="1" max="10" step="1" value="3">
+
+    <label for="twist-angle">Twist angle</label>
+    <input name="twist-angle" id="twist-angle" type="range" min="0" max="180" step="1" value="0">
+
+    <button type="button" onclick="window.app.redraw();">Redraw</button>
+  </div>
+
 </body>
 </html>
