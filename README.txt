@@ -11,4 +11,4 @@
      ░       ░  ░ ░            ░     ░  ░
                        ░
 
-   https://class.coursera.org/webgl-001
+  https://www.coursera.org/course/webgl
