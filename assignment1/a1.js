@@ -116,14 +116,6 @@ window.app = {
     }
   },
 
-  // readGeometryData: function readGeometryData() {
-  //   this.geometry.numVertices = document.getElementById('num-vertices').value;
-  //   this.geometry.numSubdivisions = document.getElementById('num-subdivisions').value;
-
-  //   var deg = document.getElementById('twist-angle').value;
-  //   this.geometry.twistAngle = Math.PI * deg / 180.0;
-  // },
-
   createGeometry: function createGeometry() {
     this.createPolygon();
     this.tessellatePolygon();
