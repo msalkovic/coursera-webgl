@@ -54,14 +54,35 @@
       Use sliders to configure the geometry.</br>
       Click Redraw to apply the changes.
       </p>
-      <label for="num-vertices">Polygon vertices</label>
-      <input name="num-vertices" id="num-vertices" type="range" min="3" max="8" step="1" value="3">
+      <label for="num-vertices" id="num-vertices-label">Polygon vertices</label>
+      <input oninput="window.app.onInputVertices()"
+             name="num-vertices"
+             id="num-vertices"
+             type="range"
+             min="3"
+             max="8"
+             step="1"
+             value="3">
 
-      <label for="num-subdivisions">Subdivision steps</label>
-      <input name="num-subdivisions" id="num-subdivisions" type="range" min="1" max="10" step="1" value="3">
+      <label for="num-subdivisions" id="num-subdivisions-label">Subdivision steps</label>
+      <input oninput="window.app.onInputSubdivisions()"
+             name="num-subdivisions"
+             id="num-subdivisions"
+             type="range"
+             min="1"
+             max="10"
+             step="1"
+             value="3">
 
-      <label for="twist-angle">Twist angle</label>
-      <input name="twist-angle" id="twist-angle" type="range" min="-180" max="180" step="1" value="0">
+      <label for="twist-angle" id="twist-angle-label">Twist angle</label>
+      <input oninput="window.app.onInputTwist()"
+             name="twist-angle"
+             id="twist-angle"
+             type="range"
+             min="-180"
+             max="180"
+             step="1"
+             value="0">
 
       <button type="button" onclick="window.app.redraw();">Redraw</button>
     </div>

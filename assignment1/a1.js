@@ -6,8 +6,8 @@ window.app = {
   geometry: {
     vertices: [],
     numVertices: 3,
-    polygonRadius: 1,
     numSubdivisions: 3,
+    polygonRadius: 1,
     points: [],
     twistAngle: 0,
   },
@@ -116,13 +116,13 @@ window.app = {
     }
   },
 
-  readGeometryData: function readGeometryData() {
-    this.geometry.numVertices = document.getElementById('num-vertices').value;
-    this.geometry.numSubdivisions = document.getElementById('num-subdivisions').value;
+  // readGeometryData: function readGeometryData() {
+  //   this.geometry.numVertices = document.getElementById('num-vertices').value;
+  //   this.geometry.numSubdivisions = document.getElementById('num-subdivisions').value;
 
-    var deg = document.getElementById('twist-angle').value;
-    this.geometry.twistAngle = Math.PI * deg / 180.0;
-  },
+  //   var deg = document.getElementById('twist-angle').value;
+  //   this.geometry.twistAngle = Math.PI * deg / 180.0;
+  // },
 
   createGeometry: function createGeometry() {
     this.createPolygon();
@@ -131,7 +131,6 @@ window.app = {
   },
 
   redraw: function redraw() {
-    this.readGeometryData();
     this.createGeometry();
     this.render();
   },
@@ -143,6 +142,35 @@ window.app = {
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
     gl.drawArrays(gl.TRIANGLES, 0, points.length);
+  },
+
+  /*
+      Handle changes to input elements.
+  */
+
+  onInputVertices: function onInput(event) {
+    var label = document.getElementById('num-vertices-label');
+    var vertices = document.getElementById('num-vertices').value;
+
+    this.geometry.numVertices = vertices;
+    label.innerHTML = 'Polygon vertices: ' + vertices;
+  },
+
+  onInputSubdivisions: function onInput(event) {
+    var label = document.getElementById('num-subdivisions-label');
+    var divs = document.getElementById('num-subdivisions').value;
+
+    this.geometry.numSubdivisions = divs;
+    label.innerHTML = 'Subdivision steps: ' + divs;
+  },
+
+  onInputTwist: function onInput(event) {
+    var label = document.getElementById('twist-angle-label');
+    var degrees = document.getElementById('twist-angle').value;
+    var radians = Math.PI * degrees / 180.0;
+
+    this.geometry.twistAngle = radians;
+    label.innerHTML = 'Twist angle: ' + degrees + '˚';
   },
 };
 
