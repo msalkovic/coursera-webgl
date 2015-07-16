@@ -51,9 +51,10 @@
 
     <div class="four columns">
       <p>
-      Use sliders to configure the geometry.</br>
-      Click Redraw to apply the changes.
+      Use sliders to configure geometry.</br>
+      Click <em>Redraw</em> to apply the changes.
       </p>
+
       <label for="num-vertices" id="num-vertices-label">Polygon vertices</label>
       <input oninput="window.app.onInputVertices()"
              name="num-vertices"
@@ -84,6 +85,7 @@
              step="1"
              value="0">
 
+      </br>
       <button type="button" onclick="window.app.redraw();">Redraw</button>
     </div>
   </div>
