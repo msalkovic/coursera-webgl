@@ -144,7 +144,7 @@ window.app = {
     var label = document.getElementById('num-vertices-label');
     var vertices = document.getElementById('num-vertices').value;
 
-    this.geometry.numVertices = vertices;
+    this.geometry.numVertices = parseInt(vertices);
     label.innerHTML = 'Polygon vertices: ' + vertices;
   },
 
@@ -152,14 +152,14 @@ window.app = {
     var label = document.getElementById('num-subdivisions-label');
     var divs = document.getElementById('num-subdivisions').value;
 
-    this.geometry.numSubdivisions = divs;
+    this.geometry.numSubdivisions = parseInt(divs);
     label.innerHTML = 'Subdivision steps: ' + divs;
   },
 
   onInputTwist: function onInput(event) {
     var label = document.getElementById('twist-angle-label');
     var degrees = document.getElementById('twist-angle').value;
-    var radians = Math.PI * degrees / 180.0;
+    var radians = Math.PI * parseInt(degrees) / 180.0;
 
     this.geometry.twistAngle = radians;
     label.innerHTML = 'Twist angle: ' + degrees + '˚';
