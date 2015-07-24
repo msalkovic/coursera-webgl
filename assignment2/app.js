@@ -41,7 +41,8 @@ window.app = {
     // Attach event observers.
     canvas.addEventListener('mousemove', window.app.handleMouseMove);
     canvas.addEventListener('mousedown', window.app.handleMouseDown);
-    document.addEventListener('mouseup', window.app.handleMouseUp);
+    canvas.addEventListener('mouseup', window.app.handleMouseUp);
+    document.addEventListener('mouseup', window.app.handleMouseUpOutside);
 
     this.redraw();
   },  
@@ -56,7 +57,7 @@ window.app = {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
-    gl.drawArrays(gl.LINE_STRIP, 0, points.length);
+    gl.drawArrays(gl.LINES, 0, points.length);
   },
 
   /*
@@ -79,16 +80,38 @@ window.app = {
     if (!app.geometry.draw) return;
 
     coords = app.canvasToGL(event.offsetX, event.offsetY);
-    app.geometry.points.push(coords);
+    // Push the same point twice - we're drawing with gl.LINES.
+    app.geometry.points.push(coords, coords);
     app.redraw();
   },
 
   handleMouseDown: function handleMouseDown(event) {
+    var coords = app.canvasToGL(event.offsetX, event.offsetY);
+    window.app.geometry.points.push(coords);
     window.app.geometry.draw = true;
   },
 
   handleMouseUp: function handleMouseUp(event) {
-    window.app.geometry.draw = false;
+    var app = window.app;
+    var draw = app.geometry.draw;
+    var coords = app.canvasToGL(event.offsetX, event.offsetY);
+
+    if (draw) {
+      window.app.geometry.points.push(coords);
+      window.app.geometry.draw = false;
+    }
+  },
+
+  handleMouseUpOutside: function handleMouseUpOutside(event) {
+    var app = window.app;
+    var draw = app.geometry.draw;
+    var points = app.geometry.points;
+
+    if (draw) {
+      // Remove last point.
+      points.splice(points.length - 1, 1);
+      window.app.geometry.draw = false;
+    }
   },
 };
 
