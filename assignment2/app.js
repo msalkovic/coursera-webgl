@@ -4,9 +4,10 @@ window.app = {
   gl: null,
   canvas: null,
   geometry: {
-    vertices: [],
+    draw: false,
     points: [],
   },
+
 
   init: function init() {
     var canvas = document.getElementById('gl-canvas');
@@ -39,6 +40,8 @@ window.app = {
 
     // Attach event observers.
     canvas.addEventListener('mousemove', window.app.handleMouseMove);
+    canvas.addEventListener('mousedown', window.app.handleMouseDown);
+    document.addEventListener('mouseup', window.app.handleMouseUp);
 
     this.redraw();
   },  
@@ -71,10 +74,21 @@ window.app = {
 
   handleMouseMove: function handleMouseMove(event) {
     var app = window.app;
-    var points = app.geometry.points;
-    var coords = app.canvasToGL(event.offsetX, event.offsetY);
-    points.push(coords);
+    var coords;
+
+    if (!app.geometry.draw) return;
+
+    coords = app.canvasToGL(event.offsetX, event.offsetY);
+    app.geometry.points.push(coords);
     app.redraw();
+  },
+
+  handleMouseDown: function handleMouseDown(event) {
+    window.app.geometry.draw = true;
+  },
+
+  handleMouseUp: function handleMouseUp(event) {
+    window.app.geometry.draw = false;
   },
 };
 
