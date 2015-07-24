@@ -4,7 +4,8 @@ window.app = {
   gl: null,
   canvas: null,
   geometry: {
-    points: [vec2(-1, -1), vec2(1, -1), vec2(1, 1), vec2(-1, 1)],
+    vertices: [],
+    points: [],
   },
 
   init: function init() {
@@ -52,20 +53,28 @@ window.app = {
 
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(points), gl.STATIC_DRAW);
-    gl.drawArrays(gl.LINES, 0, points.length);
+    gl.drawArrays(gl.LINE_STRIP, 0, points.length);
   },
 
   /*
       Handle changes to input elements.
   */
-  handleMouseMove: function handleMouseMove(event) {
+  canvasToGL: function canvasToGL(x, y) {
     var app = window.app;
     var canvas = app.canvas;
     var width = canvas.width;
     var height = canvas.height;
-    var glX = -1 + (2 * event.offsetX / width);
-    var glY = -1 + (2 * (height - event.offsetY)) / height;
-    console.log(glX, glY);
+    var glX = -1 + (2 * x / width);
+    var glY = -1 + (2 * (height - y)) / height;
+    return [glX, glY];
+  },
+
+  handleMouseMove: function handleMouseMove(event) {
+    var app = window.app;
+    var points = app.geometry.points;
+    var coords = app.canvasToGL(event.offsetX, event.offsetY);
+    points.push(coords);
+    app.redraw();
   },
 };
 
